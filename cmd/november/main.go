@@ -23,13 +23,14 @@ func showData(usrData userStats) {
 
 func fetchData(usrname string) (userStats, error) {
 
-	info, err := api.FetchUserStats(usrname)
+	stats, err := api.FetchUserStats(usrname)
 	if err != nil {
 		return userStats{}, fmt.Errorf("error getting this")
 	}
-	for _, val := range info {
+	for _, val := range stats {
 		fmt.Printf("%c", val)
 	}
+
 	return userStats{}, nil
 }
 

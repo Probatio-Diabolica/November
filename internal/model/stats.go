@@ -10,9 +10,23 @@ type UserStats struct {
 	Rating       int
 }
 
+// type LeetcodeResponse struct {
+// 	Data struct {
+// 		MatchedUser struct {
+// 			SubmitStats struct {
+// 				AcSubmissionNum []struct {
+// 					Difficulty string `json:"difficulty"`
+// 					Count      int    `json:"count"`
+// 				} `json:"acSubmissionNum"`
+// 			} `json:"submitStats"`
+// 		} `json:"matchedUser"`
+// 	} `json:"data"`
+// }
+
 type LeetcodeResponse struct {
 	Data struct {
 		MatchedUser struct {
+			Username    string `json:"username"`
 			SubmitStats struct {
 				AcSubmissionNum []struct {
 					Difficulty string `json:"difficulty"`

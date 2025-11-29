@@ -24,14 +24,14 @@ query getUserStats($username: String!) {
 const url = "https://leetcode.com/graphql"
 
 type PostQuery struct {
-	query     string                 `json:"query"`
+	Query     string                 `json:"query"`
 	Variables map[string]interface{} `json:"variables"`
 }
 
 func GetData(query string, variables map[string]interface{}) ([]byte, error) {
 
 	body := PostQuery{
-		query:     query,
+		Query:     query,
 		Variables: variables,
 	}
 
@@ -47,7 +47,11 @@ func GetData(query string, variables map[string]interface{}) ([]byte, error) {
 
 	req.Header.Set("Content-Type", "application/json")
 
-	resp, err := http.DefaultClient.Do(req)
+	//lmaoo i forgor to setup client
+	client := &http.Client{}
+
+	//yea then do this client
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("req failed")
 	}
@@ -62,5 +66,11 @@ func FetchUserStats(username string) ([]byte, error) {
 		"username": username,
 	}
 
-	return GetData(userStatsQuery, vars)
+	dat, err := GetData(userStatsQuery, vars)
+
+	if err != nil {
+		fmt.Errorf("oke something something")
+	}
+
+	return dat, err
 }
