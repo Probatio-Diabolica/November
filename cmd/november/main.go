@@ -1,13 +1,13 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"november/internal/api"
+	"november/internal/model"
 	"os"
 )
-
-type userStats struct{}
 
 func getUsername() (string, error) {
 	if len(os.Args) < 2 {
@@ -17,21 +17,49 @@ func getUsername() (string, error) {
 	return os.Args[1], nil
 }
 
-func showData(usrData userStats) {
-	fmt.Println("displayed")
+func showData(usrData model.UserStats) {
+	return
 }
 
-func fetchData(usrname string) (userStats, error) {
+func fetchData(usrname string) (model.UserStats, error) {
 
-	stats, err := api.FetchUserStats(usrname)
+	fmt.Println(usrname)
+	rawStats, err := api.FetchUserStats(usrname)
 	if err != nil {
-		return userStats{}, fmt.Errorf("error getting this")
-	}
-	for _, val := range stats {
-		fmt.Printf("%c", val)
+		return model.UserStats{}, fmt.Errorf("error getting this")
 	}
 
-	return userStats{}, nil
+	// js for debugging
+	// for _, val := range rawStats {
+	// 	fmt.Printf("%c", val)
+	// }
+
+	var rawResponse model.LeetCodeResponse
+	err = json.Unmarshal(rawStats, &rawResponse)
+	if err != nil {
+		return model.UserStats{}, err
+	}
+
+	json.Unmarshal(rawStats, &rawResponse)
+
+	var userStats model.UserStats
+	userStats.UserName = usrname
+
+	for _, entry := range rawResponse.Data.MatchedUser.SubmitStats.AcSubmissionNum {
+		switch entry.Difficulty {
+		case "Easy":
+			userStats.EasySolved = entry.Count
+		case "Medium":
+			userStats.MediumSolved = entry.Count
+		case "Hard":
+			userStats.HardSolved = entry.Count
+		case "All":
+			userStats.TotalSolved = entry.Count
+		}
+	}
+
+	fmt.Println(userStats.TotalSolved)
+	return userStats, nil
 }
 
 func main() {

@@ -66,11 +66,5 @@ func FetchUserStats(username string) ([]byte, error) {
 		"username": username,
 	}
 
-	dat, err := GetData(userStatsQuery, vars)
-
-	if err != nil {
-		fmt.Errorf("oke something something")
-	}
-
-	return dat, err
+	return GetData(userStatsQuery, vars)
 }
