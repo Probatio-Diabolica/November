@@ -40,25 +40,11 @@ func fetchData(usrname string) (model.UserStats, error) {
 		return model.UserStats{}, err
 	}
 
-	json.Unmarshal(rawStats, &rawResponse)
+	userStats := api.GetUserStats(usrname, rawResponse)
 
-	var userStats model.UserStats
-	userStats.UserName = usrname
+	//debug
+	api.Info(userStats)
 
-	for _, entry := range rawResponse.Data.MatchedUser.SubmitStats.AcSubmissionNum {
-		switch entry.Difficulty {
-		case "Easy":
-			userStats.EasySolved = entry.Count
-		case "Medium":
-			userStats.MediumSolved = entry.Count
-		case "Hard":
-			userStats.HardSolved = entry.Count
-		case "All":
-			userStats.TotalSolved = entry.Count
-		}
-	}
-
-	fmt.Println(userStats.TotalSolved)
 	return userStats, nil
 }
 

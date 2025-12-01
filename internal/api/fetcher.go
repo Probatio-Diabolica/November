@@ -10,14 +10,21 @@ import (
 
 const userStatsQuery = `
 query getUserStats($username: String!) {
-  matchedUser(username: $username) {
-    submitStats {
-      acSubmissionNum {
-        difficulty
-        count
-      }
-    }
-  }
+	matchedUser(username: $username) {
+		submitStats {
+			acSubmissionNum {
+				difficulty
+				count
+			}
+		}
+	}
+	userContestRanking(username: $username){
+		attendedContestsCount
+		rating
+		globalRanking
+		totalParticipants
+		topPercentage
+	}
 }
 `
 
