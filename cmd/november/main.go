@@ -6,6 +6,7 @@ import (
 	"log"
 	"november/internal/api"
 	"november/internal/model"
+	"november/internal/ui"
 	"os"
 )
 
@@ -18,7 +19,9 @@ func getUsername() (string, error) {
 }
 
 func showData(usrData model.UserStats) {
-	return
+	//debug
+	// ui.Out(usrData)
+	ui.DisplayUserStats(usrData)
 }
 
 func fetchData(usrname string) (model.UserStats, error) {
@@ -29,11 +32,6 @@ func fetchData(usrname string) (model.UserStats, error) {
 		return model.UserStats{}, fmt.Errorf("error getting this")
 	}
 
-	// js for debugging
-	// for _, val := range rawStats {
-	// 	fmt.Printf("%c", val)
-	// }
-
 	var rawResponse model.LeetCodeResponse
 	err = json.Unmarshal(rawStats, &rawResponse)
 	if err != nil {
@@ -41,9 +39,6 @@ func fetchData(usrname string) (model.UserStats, error) {
 	}
 
 	userStats := api.GetUserStats(usrname, rawResponse)
-
-	//debug
-	api.Info(userStats)
 
 	return userStats, nil
 }
